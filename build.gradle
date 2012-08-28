@@ -1,0 +1,31 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'maven'
+
+sourceCompatibility = 1.5
+version = '1.0'
+
+group = 'test'
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	testCompile 'junit:junit:4.10'
+}
+
+task generatePom {
+	ext.pomFile = "$rootDir/pom.xml"
+	outputs.file pomFile
+	inputs.file 'build.gradle'
+	doLast {
+		pom {}.writeTo(pomFile)
+	}
+}
+
+task wrapper(type: Wrapper) {
+	gradleVersion = '1.1'
+}
+
+processResources.dependsOn generatePom
